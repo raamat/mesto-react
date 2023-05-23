@@ -1,0 +1,14 @@
+.card {
+  display: block;
+  position: relative;
+  background-color: #fff;
+  overflow: hidden;
+  max-width: 282px;
+  border-radius: 10px;
+}
+
+@media screen and (max-width: 500px) {
+  .card {
+    margin: 0 auto;
+  }
+}
