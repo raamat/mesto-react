@@ -2,6 +2,7 @@ import Header from './Header';
 import Main from './Main';
 import Footer from './Footer';
 import PopupWithForm from './PopupWithForm';
+import ImagePopup from './ImagePopup';
 
 function App() {
   return (
@@ -10,6 +11,8 @@ function App() {
         <Header />
         <Main />
         <Footer />
+      </div>
+      
         <PopupWithForm name="edit-avatar" title="Обновить аватар" buttonText="Сохранить"> 
           <input id="input-link-avatar" className="popup__input popup__input_type_link-avatar" type="url" placeholder="Ссылка на аватар" name="link" required/>
           <span className="input-link-avatar-error popup__input-error">Вставьте ссылку на аватар</span>         
@@ -27,19 +30,7 @@ function App() {
           <span className="link-input-error popup__input-error">Вы пропустили это поле</span>
         </PopupWithForm>
         <PopupWithForm name="delete-card" title="Вы уверены?" buttonText="Да"/> 
-      </div>
-    
-      
-    
-      
-      
-      <div className="popup popup_type_zoom-photo">
-        <figure className="popup__photo-container">
-          <button className="popup__close-button opacity" type="button"></button>
-          <img className="popup__photo" src="#" alt=""/>
-          <figcaption className="popup__photo-caption"></figcaption>
-        </figure>
-      </div>
+        <ImagePopup />
       
       <template id="card-template">
         <li className="card">
