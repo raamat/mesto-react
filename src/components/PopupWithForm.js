@@ -4,7 +4,9 @@ function PopupWithForm({
   title, 
   children,
   buttonText,
-  isOpen
+  isOpen,
+  isClose,
+  onClose
 })
 
 {
@@ -15,7 +17,7 @@ function PopupWithForm({
         : `popup popup_type_${name}`
     }>
     <div className="popup__container">
-      <button className="popup__close-button opacity" type="button"></button>
+      <button className="popup__close-button opacity" type="button" onClick={onClose}></button>
       <h2 className="popup__title">{title}</h2>
         <form className={`popup__form popup__form_type_${name}`} name={`popup-form-${name}`} noValidate autoComplete="off">
           {children}
