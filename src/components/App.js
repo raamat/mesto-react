@@ -9,7 +9,6 @@ function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
-  const [isCloseAllPopups, setCloseAllPopups] = useState(true);
   
   function handleEditAvatarClick() {
     setIsEditProfilePopupOpen(!isEditProfilePopupOpen);
@@ -22,7 +21,6 @@ function App() {
   }
 
   function closeAllPopups() {
-    //setCloseAllPopups(!isCloseAllPopups);
     setIsEditProfilePopupOpen(false);
     setIsAddPlacePopupOpen(false);
     setIsEditAvatarPopupOpen(false);
@@ -40,7 +38,7 @@ function App() {
         <Footer />
       </div>
       
-        <PopupWithForm name="edit-avatar" title="Обновить аватар" buttonText="Сохранить" isOpen={isEditProfilePopupOpen} isClose={isCloseAllPopups} onClose={closeAllPopups}> 
+        <PopupWithForm name="edit-avatar" title="Обновить аватар" buttonText="Сохранить" isOpen={isEditProfilePopupOpen} onClose={closeAllPopups}> 
           <input id="input-link-avatar" className="popup__input popup__input_type_link-avatar" type="url" placeholder="Ссылка на аватар" name="link" required/>
           <span className="input-link-avatar-error popup__input-error">Вставьте ссылку на аватар</span>         
         </PopupWithForm>

@@ -5,7 +5,6 @@ function PopupWithForm({
   children,
   buttonText,
   isOpen,
-  isClose,
   onClose
 })
 
