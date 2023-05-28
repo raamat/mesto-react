@@ -57,19 +57,6 @@ function App() {
         <PopupWithForm name="delete-card" title="Вы уверены?" buttonText="Да" isOpen={false}/> 
         <ImagePopup />
       
-      <template id="card-template">
-        <li className="card">
-          <img className="card__photo" src="#" alt=""/>
-          <div className="card__caption">
-            <h2 className="card__title"></h2>
-            <button className="card__delete-button opacity" type="button"></button>
-            <div className="card__like-container">
-              <button className="card__like-button" type="button"></button>
-              <p className="card__like-count">0</p>
-            </div>
-          </div>
-        </li>
-      </template>
     </>
   );
 }
