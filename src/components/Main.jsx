@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
+import Card from './Card';
 import Spiner from './Spinner';
 import spinner from '../images/spinner.gif';
 import { api } from '../utils/api.js';
 
-function Main({ onEditAvatar, onEditProfile, onAddPlace }) {
+function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardClick }) {
   const [userName, setUserName] = useState('');
   const [userDescription, setUserDescription] = useState('');
   const [userAvatar, setUserAvatar] = useState('');
+
   const [cards, setCards] = useState([]);
   const [isCardsLoading, setIsCardsLoading] = useState(false);
   const [isProfileLoading, setIsProfileLoading] = useState(false);
@@ -20,7 +22,9 @@ function Main({ onEditAvatar, onEditProfile, onAddPlace }) {
       setUserDescription(userInfoServer.about);
       setUserAvatar(userInfoServer.avatar);
       setIsProfileLoading(false);
-    });
+      })
+      .catch(err => console.log(err));
+
     api.getInitialCards().then((cardsList) => {
       setCards(
         cardsList.map((item) => ({
@@ -32,7 +36,8 @@ function Main({ onEditAvatar, onEditProfile, onAddPlace }) {
       );
 
       setIsCardsLoading(false);
-    });
+    })
+    .catch(err => console.log(err));
   }, []);
 
   return (
@@ -54,7 +59,12 @@ function Main({ onEditAvatar, onEditProfile, onAddPlace }) {
         <div className="profile__info">
           <div className="profile__title-block">
             <h1 className="profile__title">{userName}</h1>
-            <button className="profile__edit-button opacity" type="button" aria-label="Редактировать профиль" onClick={onEditProfile}></button>
+            <button 
+              className="profile__edit-button opacity" 
+              type="button" 
+              aria-label="Редактировать профиль" 
+              onClick={onEditProfile}
+            ></button>
           </div>    
           <p className="profile__subtitle">{userDescription}</p>
         </div>
@@ -62,22 +72,9 @@ function Main({ onEditAvatar, onEditProfile, onAddPlace }) {
       </section>
       <section className="cards">
         <ul className="cards__list">
-          {
-            isCardsLoading
-            ? <Spiner />
-            : cards.map((card) => (
-                <li className="card" key={card.id}>
-                  <img className="card__photo" src={card.link} alt=""/>
-                  <div className="card__caption">
-                    <h2 className="card__title">{card.name}</h2>
-                    <button className="card__delete-button opacity" type="button"></button>
-                    <div className="card__like-container">
-                      <button className="card__like-button" type="button"></button>
-                      <p className="card__like-count">{card.likes.length}</p>
-                    </div>
-                  </div>
-                </li>
-              ))
+          {isCardsLoading
+            ? (<Spiner />)
+            : (cards.map((card) => <Card key={card.id} card={card} onCardClick={onCardClick} />))
           }
         </ul>
       </section>
