@@ -46,11 +46,10 @@ function App() {
         />
         <Footer />
       </div>
-      <ImagePopup card={selectedCard} onClose={() => setSelectedCard(null)} />
+      <ImagePopup card={selectedCard} onClose={closeAllPopups} />
       <PopupWithForm 
-        name="edit-avatar" 
-        title="Обновить аватар" 
-        buttonText="Сохранить" 
+        name="edit-avatar"
+        title="Обновить аватар"
         isOpen={isEditProfilePopupOpen} onClose={closeAllPopups}
       > 
         <input 
@@ -67,8 +66,7 @@ function App() {
       </PopupWithForm>
       <PopupWithForm 
         name="edit-profile" 
-        title="Редактировать профиль" 
-        buttonText="Сохранить" 
+        title="Редактировать профиль"
         isOpen={isAddPlacePopupOpen} 
         onClose={closeAllPopups}
       > 

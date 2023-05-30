@@ -17,28 +17,29 @@ function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardClick }) {
     setIsCardsLoading(true);
     setIsProfileLoading(true);
 
-    api.getUserInfoServer().then((userInfoServer) => {
-      setUserName(userInfoServer.name);
-      setUserDescription(userInfoServer.about);
-      setUserAvatar(userInfoServer.avatar);
-      setIsProfileLoading(false);
+    api.getUserInfoServer()
+      .then((userInfoServer) => {
+        setUserName(userInfoServer.name);
+        setUserDescription(userInfoServer.about);
+        setUserAvatar(userInfoServer.avatar);
       })
-      .catch(err => console.log(err));
+      .catch(err => console.log(err))
+      .finally(() => setIsProfileLoading(false));
 
-    api.getInitialCards().then((cardsList) => {
-      setCards(
-        cardsList.map((item) => ({
-          name: item.name,
-          link: item.link,
-          likes: item.likes,
-          id: item._id,
-        }))
-      );
-
-      setIsCardsLoading(false);
-    })
-    .catch(err => console.log(err));
-  }, []);
+    api.getInitialCards()
+      .then((cardsList) => {
+        setCards(
+          cardsList.map((item) => ({
+            name: item.name,
+            link: item.link,
+            likes: item.likes,
+            id: item._id,
+          }))
+        );
+      })
+      .catch(err => console.log(err))
+      .finally(() => setIsCardsLoading(false));
+    }, []);
 
   return (
     <main className="content">
@@ -53,7 +54,7 @@ function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardClick }) {
           {
             isProfileLoading 
             ? (<img className="profile__avatar" src={spinner} alt="Аватар"/>)
-            : (<img className="profile__avatar" src={userAvatar} alt="Идет загрузка аватара"/>)
+            : (<img className="profile__avatar" src={userAvatar} alt="Аватар"/>)
           }
         </button>
         <div className="profile__info">
