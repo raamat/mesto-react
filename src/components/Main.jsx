@@ -10,7 +10,7 @@ function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardClick, isProfileL
   const [isCardsLoading, setIsCardsLoading] = useState(false);
 
   // Подписка на контекст
-  const user = useContext(CurrentUserContext);
+  const currentUser = useContext(CurrentUserContext);
   
   useEffect(() => {
     setIsCardsLoading(true);
@@ -22,6 +22,7 @@ function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardClick, isProfileL
             link: item.link,
             likes: item.likes,
             id: item._id,
+            owner: item.owner
           }))
         );
       })
@@ -37,16 +38,16 @@ function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardClick, isProfileL
           type="button" 
           aria-label="Редактировать аватар" 
           onClick={onEditAvatar} 
-          style={{ backgroundImage: `url(${user.avatar})` }}
+          style={{ backgroundImage: `url(${currentUser.avatar})` }}
         >
           {isProfileLoading
             ? (<img className="profile__avatar" src={spinner} alt="Аватар"/>)
-            : (<img className="profile__avatar" src={user.avatar} alt="Аватар"/>)
+            : (<img className="profile__avatar" src={currentUser.avatar} alt="Аватар"/>)
           }
         </button>
         <div className="profile__info">
           <div className="profile__title-block">
-            <h1 className="profile__title">{user.name}</h1>
+            <h1 className="profile__title">{currentUser.name}</h1>
             <button 
               className="profile__edit-button opacity" 
               type="button" 
@@ -54,7 +55,7 @@ function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardClick, isProfileL
               onClick={onEditProfile}
             ></button>
           </div>    
-          <p className="profile__subtitle">{user.about}</p>
+          <p className="profile__subtitle">{currentUser.about}</p>
         </div>
         <button className="profile__add-button opacity" type="button" onClick={onAddPlace}></button>
       </section>
