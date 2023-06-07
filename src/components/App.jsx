@@ -1,16 +1,28 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Header from './Header';
 import Main from './Main';
 import Footer from './Footer';
 import PopupWithForm from './PopupWithForm';
 import ImagePopup from './ImagePopup';
+import { api } from '../utils/api.js';
+import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
 function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
   const [selectedCard, setSelectedCard] = useState(null);
-  
+  const [currentUser, setCurrentUser] = useState({});
+  const [isProfileLoading, setIsProfileLoading] = useState(false);
+
+  useEffect(() => {
+    setIsProfileLoading(true);
+    api.getUserInfoServer()
+      .then((userInfo) => {setCurrentUser(userInfo)})
+      .catch(err => console.log(err))
+      .finally(() => setIsProfileLoading(false)); 
+  }, [])
+
   function handleEditAvatarClick() {
     setIsEditProfilePopupOpen(!isEditProfilePopupOpen);
   }
@@ -35,7 +47,8 @@ function App() {
   }
 
   return (
-    <>
+    // Данные из стейт-переменной currentUser доступны всем компонентам
+    <CurrentUserContext.Provider value={currentUser}>
       <div className="page__container">
         <Header />
         <Main 
@@ -43,6 +56,7 @@ function App() {
           onEditProfile={handleEditProfileClick}
           onAddPlace={handleAddPlaceClick}
           onCardClick={handleCardClick}
+          isProfileLoading={isProfileLoading}
         />
         <Footer />
       </div>
@@ -123,7 +137,7 @@ function App() {
         <span className="link-input-error popup__input-error">Вы пропустили это поле</span>
       </PopupWithForm>
       <PopupWithForm name="delete-card" title="Вы уверены?" buttonText="Да" isOpen={false}/>  
-    </>
+    </CurrentUserContext.Provider>
   );
 }
 
