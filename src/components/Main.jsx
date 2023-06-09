@@ -1,34 +1,24 @@
-import React, { useState, useEffect, useContext } from 'react';
+import { useContext } from 'react';
 import Card from './Card';
 import Spiner from './Spinner';
 import spinner from '../images/spinner.gif';
-import { api } from '../utils/api.js';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
-function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardClick, isProfileLoading }) {
-  const [cards, setCards] = useState([]);
-  const [isCardsLoading, setIsCardsLoading] = useState(false);
+function Main({ 
+  onEditAvatar, 
+  onEditProfile, 
+  onAddPlace,
+  isProfileLoading,
+  isCardsLoading,
+  onCardClick,
+  onCardLike,
+  onCardDelete,
+  cards
+  }) 
+{
 
   // Подписка на контекст
   const currentUser = useContext(CurrentUserContext);
-  
-  useEffect(() => {
-    setIsCardsLoading(true);
-    api.getInitialCards()
-      .then((cardsList) => {
-        setCards(
-          cardsList.map((item) => ({
-            name: item.name,
-            link: item.link,
-            likes: item.likes,
-            id: item._id,
-            owner: item.owner
-          }))
-        );
-      })
-      .catch(err => console.log(err))
-      .finally(() => setIsCardsLoading(false));
-    }, []);
   
   return (
     <main className="content">
@@ -63,7 +53,14 @@ function Main({ onEditAvatar, onEditProfile, onAddPlace, onCardClick, isProfileL
         <ul className="cards__list">
           {isCardsLoading
             ? (<Spiner />)
-            : (cards.map((card) => <Card key={card.id} card={card} onCardClick={onCardClick} />))
+            : (cards.map((card) => 
+              <Card 
+                key={card._id} 
+                card={card} 
+                onCardClick={onCardClick}
+                onCardLike={onCardLike}
+                onCardDelete={onCardDelete}  
+              />))
           }
         </ul>
       </section>

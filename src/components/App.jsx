@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react';
 import Header from './Header';
 import Main from './Main';
 import Footer from './Footer';
@@ -11,9 +11,30 @@ function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
   const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = useState(false);
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = useState(false);
+  const [isProfileLoading, setIsProfileLoading] = useState(false);
+  const [isCardsLoading, setIsCardsLoading] = useState(false);
+
   const [selectedCard, setSelectedCard] = useState(null);
   const [currentUser, setCurrentUser] = useState({});
-  const [isProfileLoading, setIsProfileLoading] = useState(false);
+  const [cards, setCards] = useState([]);
+
+  useEffect(() => {
+    setIsCardsLoading(true);
+    api.getInitialCards()
+      .then((cardsList) => {
+        setCards(
+          cardsList.map((item) => ({
+            name: item.name,
+            link: item.link,
+            likes: item.likes,
+            _id: item._id,
+            owner: item.owner
+          }))
+        );
+      })
+      .catch(err => console.log(err))
+      .finally(() => setIsCardsLoading(false));
+    }, []);
 
   useEffect(() => {
     setIsProfileLoading(true);
@@ -41,9 +62,29 @@ function App() {
     setIsEditAvatarPopupOpen(false);
     setSelectedCard(null);
   }
-
+  
   function handleCardClick(card) {
-    setSelectedCard(card);
+    console.log('Клик', card);
+  }
+  
+  function handleCardLike(card) {
+    // Снова проверяем, есть ли уже лайк на этой карточке
+    const isLiked = card.likes.some(i => i._id === currentUser._id);
+    
+    // Отправляем запрос в API и получаем обновлённые данные карточки
+    api.setLikeCard(card._id, !isLiked)
+      .then((newCard) => {
+        setCards((state) => state.map((c) => c._id === card._id ? newCard : c));
+      })
+      .catch(err => console.log(err))
+  }
+
+  function handleCardDelete(card) {
+    api.deleteCardServer(card._id)
+      .then(() => {
+        setCards((state) => state.filter((c) => c._id !== card._id));
+      })
+      .catch(err => console.log(err))
   }
 
   return (
@@ -51,12 +92,16 @@ function App() {
     <CurrentUserContext.Provider value={currentUser}>
       <div className="page__container">
         <Header />
-        <Main 
+        <Main
+          isProfileLoading={isProfileLoading}
+          isCardsLoading={isCardsLoading}
           onEditAvatar={handleEditAvatarClick}
           onEditProfile={handleEditProfileClick}
           onAddPlace={handleAddPlaceClick}
           onCardClick={handleCardClick}
-          isProfileLoading={isProfileLoading}
+          onCardLike={handleCardLike}
+          onCardDelete={handleCardDelete}
+          cards={cards}
         />
         <Footer />
       </div>
