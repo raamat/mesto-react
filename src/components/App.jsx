@@ -4,6 +4,7 @@ import Main from './Main';
 import Footer from './Footer';
 import PopupWithForm from './PopupWithForm';
 import ImagePopup from './ImagePopup';
+import EditAvatarPopup from './EditAvatarPopup'
 import EditProfilePopup from './EditProfilePopup';
 import { api } from '../utils/api.js';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
@@ -91,7 +92,15 @@ function App() {
 
   function handleUpdateUser(infoUser) {
     api.setUserInfoServer(infoUser)
-      .then((state) => setCurrentUser(state))
+      .then((data) => setCurrentUser(data))
+      .catch(err => console.log(err))
+      .finally(() => closeAllPopups())
+  }
+
+  function handleUpdateAvatar(userAvatar) {
+    debugger
+    api.updateAvatarServer(userAvatar.avatar)
+      .then((data) => setCurrentUser(data))
       .catch(err => console.log(err))
       .finally(() => closeAllPopups())
   }
@@ -115,23 +124,11 @@ function App() {
         <Footer />
       </div>
       <ImagePopup card={selectedCard} onClose={closeAllPopups} />
-      <PopupWithForm 
-        name="edit-avatar"
-        title="Обновить аватар"
-        isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups}
-      > 
-        <input 
-          id="input-link-avatar" 
-          className="popup__input popup__input_type_link-avatar" 
-          type="url" 
-          placeholder="Ссылка на аватар" 
-          name="link" 
-          required
-        />
-        <span className="input-link-avatar-error popup__input-error">
-          Вставьте ссылку на аватар
-        </span>         
-      </PopupWithForm>
+      <EditAvatarPopup 
+        isOpen={isEditAvatarPopupOpen} 
+        onClose={closeAllPopups}
+        onUpdateAvatar={handleUpdateAvatar}
+      />
       <EditProfilePopup
         isOpen={isEditProfilePopupOpen} 
         onClose={closeAllPopups}
