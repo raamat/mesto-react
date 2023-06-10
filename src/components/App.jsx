@@ -4,6 +4,7 @@ import Main from './Main';
 import Footer from './Footer';
 import PopupWithForm from './PopupWithForm';
 import ImagePopup from './ImagePopup';
+import EditProfilePopup from './EditProfilePopup';
 import { api } from '../utils/api.js';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 
@@ -45,15 +46,16 @@ function App() {
   }, [])
 
   function handleEditAvatarClick() {
-    setIsEditProfilePopupOpen(!isEditProfilePopupOpen);
+    setIsEditAvatarPopupOpen(!isEditAvatarPopupOpen);
+    
   }
 
   function handleEditProfileClick() {
-    setIsAddPlacePopupOpen(!isAddPlacePopupOpen);
+    setIsEditProfilePopupOpen(!isEditProfilePopupOpen); 
   }
 
   function handleAddPlaceClick() {
-    setIsEditAvatarPopupOpen(!isEditAvatarPopupOpen);
+    setIsAddPlacePopupOpen(!isAddPlacePopupOpen);
   }
 
   function closeAllPopups() {
@@ -87,6 +89,13 @@ function App() {
       .catch(err => console.log(err))
   }
 
+  function handleUpdateUser(infoUser) {
+    api.setUserInfoServer(infoUser)
+      .then((state) => setCurrentUser(state))
+      .catch(err => console.log(err))
+      .finally(() => closeAllPopups())
+  }
+
   return (
     // Данные из стейт-переменной currentUser доступны всем компонентам
     <CurrentUserContext.Provider value={currentUser}>
@@ -109,7 +118,7 @@ function App() {
       <PopupWithForm 
         name="edit-avatar"
         title="Обновить аватар"
-        isOpen={isEditProfilePopupOpen} onClose={closeAllPopups}
+        isOpen={isEditAvatarPopupOpen} onClose={closeAllPopups}
       > 
         <input 
           id="input-link-avatar" 
@@ -123,41 +132,16 @@ function App() {
           Вставьте ссылку на аватар
         </span>         
       </PopupWithForm>
-      <PopupWithForm 
-        name="edit-profile" 
-        title="Редактировать профиль"
-        isOpen={isAddPlacePopupOpen} 
+      <EditProfilePopup
+        isOpen={isEditProfilePopupOpen} 
         onClose={closeAllPopups}
-      > 
-        <input 
-          id="name-input" 
-          className="popup__input popup__input_type_name" 
-          type="text" 
-          placeholder="Имя" 
-          name="name" minLength="2" 
-          maxLength="40" 
-          required 
-          defaultValue="Имя"
-        />
-        <span className="name-input-error popup__input-error"></span>
-        <input 
-          id="job-input" 
-          className="popup__input popup__input_type_job" 
-          type="text" 
-          placeholder="Род деятельности" 
-          name="job" 
-          minLength="2" 
-          maxLength="200" 
-          required 
-          defaultValue="Род деятельности"
-        />
-        <span className="job-input-error popup__input-error"></span>       
-      </PopupWithForm>
+        onUpdateUser={handleUpdateUser}
+      />
       <PopupWithForm 
         name="add-card" 
         title="Новое место" 
         buttonText="Создать" 
-        isOpen={isEditAvatarPopupOpen} 
+        isOpen={isAddPlacePopupOpen} 
         onClose={closeAllPopups}
       > 
         <input 

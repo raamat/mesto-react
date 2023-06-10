@@ -41,7 +41,7 @@ class Api {
     return this._insertFetch('users/me', 'PATCH', 
       {
         name: inputValues.name,
-        about: inputValues.job
+        about: inputValues.about
       }
     ) 
     .then(this._checkErr)
