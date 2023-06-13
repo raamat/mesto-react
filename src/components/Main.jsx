@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import Card from './Card';
-import Spiner from './Spinner';
+import Spiner from './Spinner/Spinner';
 import spinner from '../images/spinner.gif';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 

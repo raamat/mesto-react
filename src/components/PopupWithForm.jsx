@@ -21,7 +21,6 @@ function PopupWithForm({
           className={`popup__form popup__form_type_${name}`}
           name={`popup-form-${name}`}
           onSubmit={onSubmit}
-          noValidate
           autoComplete="off"
         >
           {children}

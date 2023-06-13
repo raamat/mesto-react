@@ -159,10 +159,10 @@ function App() {
         onAddPlace={handleAddPlaceSubmit}
       />
       <PopupWithForm
+        isOpen={false}
         name="delete-card"
         title="Вы уверены?"
         buttonText="Да"
-        isOpen={false}
       />
     </CurrentUserContext.Provider>
   );

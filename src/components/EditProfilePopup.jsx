@@ -5,7 +5,6 @@ import { CurrentUserContext } from "../contexts/CurrentUserContext";
 function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
   // Подписка на контекст
   const currentUser = useContext(CurrentUserContext);
-  //console.log(currentUser.name)
 
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
@@ -13,7 +12,7 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
   useEffect(() => {
     setName(currentUser.name);
     setDescription(currentUser.about);
-  }, [currentUser]);
+  }, [currentUser, isOpen]);
 
   // Обработчик изменения инпута обновляет стейт
   function handleChangeName(event) {
@@ -52,7 +51,7 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
         minLength="2"
         maxLength="40"
         required
-        value={name}
+        value={name || ""}
         onChange={handleChangeName}
       />
       <span className="name-input-error popup__input-error"></span>
@@ -65,7 +64,7 @@ function EditProfilePopup({ isOpen, onClose, onUpdateUser }) {
         minLength="2"
         maxLength="200"
         required
-        value={description}
+        value={description || ""}
         onChange={handleChangeDescription}
       />
       <span className="job-input-error popup__input-error"></span>
